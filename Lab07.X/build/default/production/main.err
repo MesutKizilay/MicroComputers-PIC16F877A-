@@ -1,0 +1,19 @@
+Message[301] C:\PROGRAM FILES (X86)\MICROCHIP\MPLABX\V5.20\MPASMX\P16F877.INC 34 : MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 18 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 19 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 20 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 21 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 27 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 35 : Found label after column 1. (number)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 36 : Found label after column 1. (digit0)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 37 : Found label after column 1. (digit1)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 38 : Found label after column 1. (no_iteration)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 39 : Found label after column 1. (i)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 53 : Found label after column 1. (_WHILE)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 57 : Found label after column 1. (_FOR)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 78 : Found label after column 1. (END_FOR)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 83 : Found label after column 1. (_IF)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 91 : Found label after column 1. (NEXT_IF)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 108 : Found label after column 1. (END_IF)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 109 : Found label after column 1. (END_WHILE)
+Warning[205] C:\USERS\MESUT\MPLABXPROJECTS\LAB07.X\MAIN.ASM 274 : Found directive in column 1. (END)

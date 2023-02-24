@@ -1,0 +1,58 @@
+MPLINK 5.09, LINKER
+Linker Map File - Created Thu Dec 23 21:48:39 2021
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x0000a2
+                   .cinit    romdata   0x000051    program   0x000004
+.config_2007_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000052      
+                            0x002007    0x002007      
+            84 out of 8454 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                 Delay5ms   0x000046    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+       Delay5ms_InnerLoop   0x00004a    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+       Delay5ms_OuterLoop   0x000048    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                  END_FOR   0x000022    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                   END_IF   0x000035    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                END_WHILE   0x000035    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                  GetCode   0x000035    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                     LOOP   0x000050    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                  NEXT_IF   0x00002a    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+             _.org_0_0050   0x000050    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                     _FOR   0x000010    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                      _IF   0x000024    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                   _WHILE   0x000010    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     _FOR   0x000010    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                   _WHILE   0x000010    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                  END_FOR   0x000022    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                      _IF   0x000024    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                  NEXT_IF   0x00002a    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                   END_IF   0x000035    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                END_WHILE   0x000035    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                  GetCode   0x000035    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                 Delay5ms   0x000046    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+       Delay5ms_OuterLoop   0x000048    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+       Delay5ms_InnerLoop   0x00004a    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+                     LOOP   0x000050    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+             _.org_0_0050   0x000050    program     static C:\Users\mesut\MPLABXProjects\Lab06.X\main.asm
+
+

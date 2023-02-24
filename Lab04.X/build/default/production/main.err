@@ -1,0 +1,13 @@
+Warning[205] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 4 : Found directive in column 1. (LIST)
+Warning[205] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 5 : Found directive in column 1. (INCLUDE)
+Message[301] C:\PROGRAM FILES (X86)\MICROCHIP\MPLABX\V5.20\MPASMX\P16F877.INC 34 : MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+Warning[205] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 6 : Found directive in column 1. (__CONFIG)
+Warning[205] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 7 : Found directive in column 1. (radix)
+Warning[205] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 9 : Found directive in column 1. (org)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 152 : Found label after column 1. (i)
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 177 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 178 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 217 : Found label after column 1. (k)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 218 : Found label after column 1. (j)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 221 : Found label after column 1. (Delay250ms_OuterLoop)
+Warning[207] C:\USERS\MESUT\MPLABXPROJECTS\LAB04.X\MAIN.ASM 224 : Found label after column 1. (Delay250ms_InnerLoop)

@@ -1,0 +1,1171 @@
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001    ;Mesut KIZILAY 152120181053
+                      00002    ;Hasan Can GÖRMEZ 152120181035 
+                      00003     LIST        P=16F877
+                      00004     INCLUDE     P16F877.INC
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Mar 17 2019
+                      00005 ;  MPASM PIC16F877 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2019 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+Message[301]: MESSAGE: (Processor-header file mismatch.  Verify selected processor.)
+                      00541         LIST
+2007   3D71           00005     __CONFIG _CP_OFF &_WDT_OFF & _BODEN_ON & _PWRTE_ON & _XT_OSC & _WRT_ENABLE_OFF & _LVP_OFF & _DEBUG_O
+                            FF & _CPD_OFF 
+                      00006     
+                      00007     ; Reset vector
+                      00008     org 0x00    
+0000   2???           00009         GOTO    MAIN            ; Jump to the main function
+                      00010         
+                      00011     #include <Delay.inc>        ; Delay library (Copy the contents here)
+                      00001 ; Keep these variables in the 16 byte memory area shared by all banks 
+                      00002 ; so that we don't have to worry about bank selection
+                      00003 ; The shared ares is in between [0x70-0x7f]
+  0000007C            00004 delay_counter1  EQU     0x7c
+  0000007D            00005 delay_counter2  EQU     0x7d
+  0000007E            00006 delay_counter3  EQU     0x7e
+  0000007F            00007 delay_counter4  EQU     0x7f    
+                      00008 
+                      00009 ;------------------------------------------------------------
+                      00010 ; Assumes that the microprocessor is run with a 4Mhz oscilator
+                      00011 ; In a 4Mhz oscilator, one operation takes 1 microsecond        
+                      00012 ; With this code, 42x3=126 cycles are obtained on the average
+                      00013 ;------------------------------------------------------------
+0001                  00014 Delay_125us
+0001   302A           00015         MOVLW   0x2A                ; Decimal 42
+0002   00FC           00016         MOVWF   delay_counter1      ; 
+0003                  00017 LABEL_125us_DELAY
+0003   0BFC           00018         DECFSZ  delay_counter1, F   ; 
+0004   2???           00019         GOTO    LABEL_125us_DELAY
+0005   0008           00020         RETURN  
+                      00021 
+                      00022 ;------------------------------------------------------------
+                      00023 ; Simply call Delay_125us 8 times to obtain a 1ms delay
+                      00024 ;------------------------------------------------------------
+0006                  00025 Delay_1ms
+0006   3008           00026         MOVLW   .8                  ; WREG <- Decimal 8
+0007   00FD           00027         MOVWF   delay_counter2      ; delay_counter2 <- WREG
+0008                  00028 LABEL_1ms_DELAY 
+0008   2???           00029         CALL    Delay_125us         ; Call 125 microsecond delay
+0009   0BFD           00030         DECFSZ  delay_counter2, F   ; Do this 8 times. 8x125us = 1ms
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000A   2???           00031         GOTO    LABEL_1ms_DELAY    
+000B   0008           00032         RETURN
+                      00033         
+                      00034 ;------------------------------------------------------------
+                      00035 ; Simply call Delay_1ms 5 times to obtain a 5ms delay
+                      00036 ;------------------------------------------------------------
+000C                  00037 Delay_5ms
+000C   3005           00038         MOVLW   .5                  ; WREG <- Decimal 5
+000D   00FE           00039         MOVWF   delay_counter3      ; delay_counter3 <- WREG
+000E                  00040 LABEL_5ms_DELAY 
+000E   2???           00041         CALL    Delay_1ms           ; Call 1 microsecond delay
+000F   0BFE           00042         DECFSZ  delay_counter3, F   ; Do this 5 times. 5x1ms = 5ms
+0010   2???           00043         GOTO    LABEL_5ms_DELAY     
+0011   0008           00044         RETURN
+                      00045 
+                      00046 ;------------------------------------------------------------
+                      00047 ; Simply call Delay_1ms 20 times to obtain a 20ms delay
+                      00048 ;------------------------------------------------------------
+0012                  00049 Delay_20ms
+0012   3014           00050         MOVLW   .20                 ; WREG <- Decimal 5
+0013   00FE           00051         MOVWF   delay_counter3      ; delay_counter3 <- WREG
+0014                  00052 LABEL_20ms_DELAY        
+0014   2???           00053         CALL    Delay_1ms           ; Call 1 microsecond delay
+0015   0BFE           00054         DECFSZ  delay_counter3, F   ; Do this 20 times. 30x1ms = 20ms
+0016   2???           00055         GOTO    LABEL_20ms_DELAY            
+0017   0008           00056         RETURN
+                      00057         
+                      00058 ;------------------------------------------------------------
+                      00059 ; Simply call Delay_5ms 10 times to obtain a 100ms delay
+                      00060 ;------------------------------------------------------------
+0018                  00061 Delay_50ms
+0018   300A           00062         MOVLW   .10                 ; WREG <- Decimal 10
+0019   00FF           00063         MOVWF   delay_counter4      ; delay_counter4 <- WREG
+001A                  00064 LABEL_50ms_DELAY        
+001A   2???           00065         CALL    Delay_5ms           ; Call 5 microsecond delay
+001B   0BFF           00066         DECFSZ  delay_counter4, F   ; Do this 10 times. 10x5ms = 50ms
+001C   2???           00067         GOTO    LABEL_50ms_DELAY            
+001D   0008           00068         RETURN
+                      00069 
+                      00070 ;------------------------------------------------------------
+                      00071 ; Simply call Delay_5ms 20 times to obtain a 100ms delay
+                      00072 ;------------------------------------------------------------
+001E                  00073 Delay_100ms
+001E   3014           00074         MOVLW   .20                 ; WREG <- Decimal 20
+001F   00FF           00075         MOVWF   delay_counter4      ; delay_counter4 <- WREG
+0020                  00076 LABEL_100ms_DELAY       
+0020   2???           00077         CALL    Delay_5ms           ; Call 5 microsecond delay
+0021   0BFF           00078         DECFSZ  delay_counter4, F   ; Do this 20 times. 20x5ms = 100ms
+0022   2???           00079         GOTO    LABEL_100ms_DELAY           
+0023   0008           00080         RETURN
+                      00081 
+                      00082 ;------------------------------------------------------------
+                      00083 ; Simply call Delay_5ms 50 times to obtain a 250ms delay
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00084 ;------------------------------------------------------------
+0024                  00085 Delay_250ms
+0024   3032           00086         MOVLW   .50                 ; WREG <- Decimal 50
+0025   00FF           00087         MOVWF   delay_counter4      ; delay_counter4 <- WREG
+0026                  00088 LABEL_250ms_DELAY       
+0026   2???           00089         CALL    Delay_5ms           ; Call 5 microsecond delay
+0027   0BFF           00090         DECFSZ  delay_counter4, F   ; Do this 50 times. 50x5ms = 250ms
+0028   2???           00091         GOTO    LABEL_250ms_DELAY           
+0029   0008           00092         RETURN
+                      00093 
+                      00094 ;------------------------------------------------------------
+                      00095 ; Simply call Delay_5ms 100 times to obtain a 500ms delay
+                      00096 ;------------------------------------------------------------
+002A                  00097 Delay_500ms
+002A   3064           00098         MOVLW   .100                ; WREG <- Decimal 100
+002B   00FF           00099         MOVWF   delay_counter4      ; delay_counter4 <- WREG
+002C                  00100 LABEL_500ms_DELAY       
+002C   2???           00101         CALL    Delay_5ms           ; Call 5 microsecond delay
+002D   0BFF           00102         DECFSZ  delay_counter4, F   ; Do this 100 times. 100x5ms = 500ms
+002E   2???           00103         GOTO    LABEL_500ms_DELAY           
+002F   0008           00104         RETURN
+                      00105         
+                      00106 ;------------------------------------------------------------
+                      00107 ; Simply call Delay_5ms 200 times to obtain a 1sec delay
+                      00108 ;------------------------------------------------------------
+0030                  00109 Delay_1s
+0030   30C8           00110         MOVLW   .200                ; WREG <- Decimal 200
+0031   00FF           00111         MOVWF   delay_counter4      ; delay_counter4 <- WREG
+0032                  00112 LABEL_1s_DELAY  
+0032   2???           00113         CALL    Delay_5ms           ; Call 5 microsecond delay
+0033   0BFF           00114         DECFSZ  delay_counter4, F   ; Do this 200 times. 200x5ms = 1sec
+0034   2???           00115         GOTO    LABEL_1s_DELAY      
+0035   0008           00116         RETURN
+                      00117         
+                      00118         
+                      00119 
+                      00120         
+                      00012     #include <LcdLib.inc>       ; LcdLib.inc (LCD) utility routines
+                      00001 ; This LCD library assumes that ALL 8 data pins [D7-D0] are connected to pins [7-0] of PORTD.
+                      00002 ; Thus the LCD is used in 8-bit mode.
+                      00003 ;
+                      00004 ; Control pints [RS, R/W, E] are assumed to be connected to pins [0-2] of PORTE in this order
+                      00005 ; That is, RS must be connected to pin0 of PORTE
+                      00006 ;          R/W must be connected to pin1 of PORTE
+                      00007 ;          E (Enable) must be connected to pin2 PORTE
+                      00008 ;
+                      00009 
+                      00010 ;#define LCD_NO_OF_DATA_BITS    4
+                      00011 #define LCD_NO_OF_DATA_BITS     8
+                      00012         
+                      00013 ;------------------------------------------------------------
+                      00014 ; This is how we set up the configuration bits of the LCD
+                      00015 #if 0    
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00016 ; These are the connections in our experiment board
+                      00017 #define RS      PORTE, 0    ; RS is connected to pin 0 of PORTE
+                      00018 #define RW      PORTE, 1    ; RW is connected to pin 1 of PORTE
+                      00019 #define EN      PORTE, 2    ; E  is connected to pin 2 of PORTE
+                      00020 
+                      00021 #else
+                      00022 ; These are the connections in PICSIM
+                      00023 #define RS      PORTE, 2    ; RS is connected to pin 2 of PORTE
+                      00024 #define RW      PORTE, 0    ; RW is connected to pin 0 of PORTE
+                      00025 #define EN      PORTE, 1    ; E  is connected to pin 1 of PORTE
+                      00026 #endif
+                      00027     
+                      00028 #define D7      PORTD, 7    ; Which pin of the MCU is connected to D7 of the LCD?    
+                      00029 #define D6      PORTD, 6    ; Which pin of the MCU is connected to D6 of the LCD?    
+                      00030 #define D5      PORTD, 5    ; Which pin of the MCU is connected to D5 of the LCD?    
+                      00031 #define D4      PORTD, 4    ; Which pin of the MCU is connected to D4 of the LCD?  
+                      00032 
+                      00033 #if LCD_NO_OF_DATA_BITS == 8    
+                      00034 #define D3      PORTD, 3    ; Which pin of the MCU is connected to D3 of the LCD?    
+                      00035 #define D2      PORTD, 2    ; Which pin of the MCU is connected to D2 of the LCD?    
+                      00036 #define D1      PORTD, 1    ; Which pin of the MCU is connected to D1 of the LCD?    
+                      00037 #define D0      PORTD, 0    ; Which pin of the MCU is connected to D0 of the LCD?    
+                      00038 #endif
+                      00039     
+                      00040 ; The LCD display has two lines of characters, 16 characters per line. 
+                      00041 ; Each character is composed of matrix of pixels size 5x8. 
+                      00042 ; The matrix is controlled by Hitachi HD44780 controller, 
+                      00043 ; which performs all the operations that are required to run the matrix. 
+                      00044 ; Controller operation is done in accordance with the instructions it receives as described below:
+                      00045 ;
+                      00046 ; A 2x16 character LCD has 14 pins
+                      00047 ; DB0 - DB7, the 8 data bus lines, which perform read/write of data
+                      00048 ; Vss, Vdd - Voltage supply pins
+                      00049 ; R/W ? Pin writing/reading to/from - LCD
+                      00050 ; RS - Pin selects registers between Instruction Register and Data Register
+                      00051 ; E - "Enabling" pin; when this pin is set to logical low, the LCD does not care what is happening 
+                      00052 ;     with R/W, RS, and the data bus lines; when this pin is set to logical high, the - LCD is processin
+                            g the incoming data
+                      00053 ; Vo - Pin for LCD contrast
+                      00054 ;
+                      00055 ; Some of the addresses represent the lines of LCD (0x00-0x0F- first line; 0x40-0x4F second line). 
+                      00056 ; The rest of the addresses represent the ?non-visible? memory of the DRAM, 
+                      00057 ; which can be also used as a general memory. The DDRAM address is the position 
+                      00058 ; of the cursor on the display LCD (the received information will be written 
+                      00059 ; at the place where the cursor is).
+                      00060 ; 
+                      00061 ; Below be show the meaning of each configuration of <RS:RW> bits.
+                      00062 ; RS    R/W      
+                      00063 ; 0     0       Sends a command to LCD
+                      00064 ; 0     1       Read busy flag (DB7) and address counter (DB0 to DB6)
+                      00065 ; 1     0       Sends information to LCD
+                      00066 ; 1     1       Reads information from LCD
+                      00067             
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00068 ;------------------------------------------------------------
+                      00069 ; Before we start using the LCD, we must first initialize certain bits
+                      00070 ;
+0036                  00071 LCD_Initialize    
+                      00072     ; During a power reset, LCD takes up to 10ms to reboot and stabilize
+                      00073     ; before a command can be sent to it. Therefore, we wait for 10ms 
+                      00074     ; before sending the first command
+0036   1089           00075     BCF         EN                  ; Make EN pin 0
+0037   1109           00076     BCF         RS                  ; Make RS bit 0 -- Will send commands
+0038   1009           00077     BCF         RW                  ; Make RW bit 0
+0039   0188           00078     CLRF        PORTD               ; Make all bits of PORTD 0
+003A   2???           00079     CALL        Delay_20ms          ; Wait for 20ms
+                      00080     
+                      00081     ; Set LCD usage mode: 4-bit/2-lines/5x7 dot chars
+                      00082     IF  LCD_NO_OF_DATA_BITS == 4
+                      00083         BCF     D7                  ; D7=0
+                      00084         BCF     D6                  ; D6=0
+                      00085         BSF     D5                  ; D5=1
+                      00086         BSF     D4                  ; D4=1
+                      00087         CALL    LCD_Send_Trigger    ; Send 0x3 to the LCD: Means Attention
+                      00088         CALL    Delay_20ms
+                      00089         
+                      00090         CALL    LCD_Send_Trigger    ; Send 0x3 to the LCD: Means Attention
+                      00091         CALL    Delay_20ms
+                      00092 
+                      00093         CALL    LCD_Send_Trigger    ; Send 0x3 to the LCD Means Attention
+                      00094         CALL    Delay_20ms
+                      00095         
+                      00096         BCF     D7                  ; D7=0
+                      00097         BCF     D6                  ; D6=0
+                      00098         BSF     D5                  ; D5=1
+                      00099         BCF     D4                  ; D4=0
+                      00100         CALL    LCD_Send_Trigger    ; Send 0x2: Puts the LCD in 4-bit mode
+                      00101         CALL    Delay_20ms
+                      00102     
+                      00103         ; Now start sending commands
+                      00104         MOVLW   0x28                ; 4-bit, 2-lines, 5x7 dot characters: 0011 1000
+                      00105         CALL    LCD_Send_Command    ; Send the command to the LCD
+                      00106         
+                      00107     ELSE        
+003B   3030           00108         MOVLW   0x30                ; Attention
+003C   2???           00109         CALL    LCD_Send_Command    ; Send the command to the LCD
+003D   2???           00110         CALL    Delay_20ms          
+                      00111 
+003E   3030           00112         MOVLW   0x30                ; Attention
+003F   2???           00113         CALL    LCD_Send_Command    ; Send the command to the LCD
+0040   2???           00114         CALL    Delay_20ms          
+                      00115 
+0041   3030           00116         MOVLW   0x30                ; Attention
+0042   2???           00117         CALL    LCD_Send_Command    ; Send the command to the LCD
+0043   2???           00118         CALL    Delay_20ms          
+                      00119         
+0044   3038           00120         MOVLW   0x38                ; 8-bit, 2-lines, 5x7 dot characters: 0011 1000
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0045   2???           00121         CALL    LCD_Send_Command    ; Send the command to the LCD
+                      00122     ENDIF       
+                      00123     
+                      00124         ; Turn the LCD on and set cursor properties
+0046   300F           00125         MOVLW   0x0F                ; LCD open, cursor on, cursor blinking:      0000 1111
+                      00126 ;       MOVLW   0x0C                ; LCD open, cursor off, cursor not blinking: 0000 1100
+0047   2???           00127         CALL    LCD_Send_Command    ; Send the command to the LCD
+                      00128 
+0048   3006           00129         MOVLW   0x06                ; Entry mode: 0000 0110
+0049   2???           00130         CALL    LCD_Send_Command    ; Send the command to the LCD
+                      00131         
+                      00132         ; Clear the current contents of the LCD and move the cursor to the start of the first line
+004A   2???           00133         CALL    LCD_Clear
+004B   0008           00134         RETURN
+                      00135 
+                      00136 ;------------------------------------------------------------   
+                      00137 ; Sends one byte stored in WREG to the LCD
+                      00138 ;       
+004C                  00139 LCD_Send
+004C   0088           00140     MOVWF       PORTD               ; PORTD <- WREG
+004D   2???           00141     CALL        LCD_Send_Trigger    ; Send the trigger signal to LCD so that the sent command is execute
+                            d
+                      00142         
+                      00143     IF  LCD_NO_OF_DATA_BITS == 4
+                      00144         SWAPF   PORTD               ; Swap bits [7-4] with [3-0]
+                      00145         CALL    LCD_Send_Trigger    ; Send the trigger signal to LCD so that the sent command is execute
+                            d
+                      00146     ENDIF
+                      00147     
+004E   0008           00148     RETURN
+                      00149         
+                      00150 ;------------------------------------------------------------   
+                      00151 ; Display the character in WREG at the current cursor position
+                      00152 ;       
+004F                  00153 LCD_Send_Command
+004F   1109           00154         BCF     RS                  ; 
+0050   1009           00155         BCF     RW                  ; <RS:RW>=<0:0> means we are sending a command to the LCD
+                      00156 
+0051   2???           00157         CALL    LCD_Send            ; Send the command
+0052   0008           00158         RETURN
+                      00159                 
+                      00160 ;------------------------------------------------------------   
+                      00161 ; Display the character in WREG at the current cursor position
+                      00162 ;       
+0053                  00163 LCD_Send_Char
+0053   1509           00164         BSF     RS                  ; 
+0054   1009           00165         BCF     RW                  ; <RS:RW>=<1:0> means, we will be sending data
+                      00166 
+0055   2???           00167         CALL    LCD_Send            ; Send the character
+0056   0008           00168         RETURN
+                      00169         
+                      00170 ;------------------------------------------------------------   
+                      00171 ; Clear the LCD
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00172 ;
+0057                  00173 LCD_Clear       
+0057   3001           00174         MOVLW   0x01                ; 0x1 is the clear LCD command
+0058   2???           00175         CALL    LCD_Send_Command        
+                      00176 
+0059   2???           00177         CALL    Delay_5ms           ; Wait for 5 ms for LCD to finish clearing the screen
+005A   0008           00178         RETURN  
+                      00179 
+                      00180 ;------------------------------------------------------------   
+                      00181 ; Move the cursor to the start of the second line
+                      00182 ;
+005B                  00183 LCD_MoveCursor2SecondLine
+                      00184         ; Set DD RAM Address:
+                      00185         ; This sets the DD RAM address.
+                      00186         ; and the cursor advances in the direction where the I/D bit was set to. The line settings are a
+                            s follows:
+                      00187         ; RS    R/W     D7      D6      D5      D4      D3      D2      D1      D0
+                      00188         ; 0     0       1       MSB DD RAM ADDRESS LSB  
+005B   30C0           00189         MOVLW   0xC0                ; Address of the first byte of the second line: 0x40
+005C   2???           00190         CALL    LCD_Send_Command
+005D   0008           00191         RETURN
+                      00192         
+                      00193 ;------------------------------------------------------------
+                      00194 ; For LCD to process a given data (from the data bits), we first
+                      00195 ; need to enable it, wait for some time (until LCD finishes processing
+                      00196 ; the command), and then disable the E pin. This is called sending a trigger signal
+                      00197 ; This essentially means that we send the following signal to the E pin of the LCD
+                      00198 ;      +-----+ 
+                      00199 ;      |     |
+                      00200 ;      |     |
+                      00201 ; -----+ 1us +--------
+                      00202 ;
+                      00203 ; Many flip-flop based devices work this way. After you put the data at the input pins
+                      00204 ; of the device, you need to send a trigger signal for the device to process that input
+                      00205 ;
+005E                  00206 LCD_Send_Trigger                
+005E   1089           00207         BCF     EN              ; Bring the Enable bit to 0
+005F   0000           00208         NOP
+0060   0000           00209         NOP
+0061   0000           00210         NOP
+0062   0000           00211         NOP                     ; Wait for 5 microseconds
+0063   1489           00212         BSF     EN              ; Bring the Enable bit to 1
+0064   0000           00213         NOP                     
+0065   0000           00214         NOP
+0066   0000           00215         NOP
+0067   0000           00216         NOP
+0068   0000           00217         NOP                     ; Wait for 5 microseconds       
+0069   1089           00218         BCF     EN              ; Bring the Enable bit back to 0 (processing occurs on this falling edge
+                            ?)
+006A   2???           00219         CALL    Delay_125us     ; Wait 125 microsecond for LCD to finish processing of the previous comm
+                            and
+006B   0008           00220         RETURN
+                      00013 
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00014     ; This is the start of our main function
+006C                  00015 MAIN:    
+006C   1683           00016     BSF     STATUS, RP0 ; Select Bank1
+006D   3000           00017     MOVLW       0x0             ; WREG <- 0     
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+006E   0088           00018     MOVWF       TRISD           ; Make all pins of PORTD output
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+006F   0089           00019     MOVWF       TRISE           ; Make all ports of PORTE output
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0070   0086           00020     MOVWF       TRISB
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0071   0085           00021     MOVWF       TRISA
+                      00022     ; This is only necessary because our programming board connects E0, E1 and E2 pins of the MCU
+                      00023     ; to LCD's control pins RS, RW, EN respectively. Because PORTE shares the same pins as the analog pi
+                            ns of PORTA of the MCU,
+                      00024     ; not only we must we set PORTE pins as output, but also set the analog pins of PORTA as digital out
+                            put.
+                      00025     ; If we don't do this, PORTE's pins are not set up properly, and the LCD does not work      
+0072   3003           00026     MOVLW       0x03            ; Choose RA0 analog input and RA3 reference input
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0073   009F           00027     MOVWF       ADCON1          ; Register to configure PORTA's pins as analog/digital <11> means, all b
+                            ut one are analog
+                      00028 
+0074   1283           00029     BCF     STATUS, RP0 ; Select Bank0
+0075   0188           00030     CLRF        PORTD           ; PORTD = 0
+0076   0185           00031     CLRF        PORTA           ; Deselect all SSDs
+0077   0186           00032     CLRF        PORTB
+0078   2???           00033     CALL        LCD_Initialize  ; Initialize the LCD
+                      00034 
+Warning[207]: Found label after column 1. (number)
+  00000024            00035     number EQU 0x24
+Warning[207]: Found label after column 1. (digit0)
+  00000020            00036     digit0 EQU 0x20
+Warning[207]: Found label after column 1. (digit1)
+  00000021            00037     digit1 EQU 0x21     
+Warning[207]: Found label after column 1. (no_iteration)
+  00000022            00038     no_iteration EQU 0x22
+Warning[207]: Found label after column 1. (i)
+  00000023            00039     i EQU 0x23
+                      00040 
+0079   01A3           00041     CLRF    i
+007A   01A4           00042     CLRF    number
+                      00043 
+007B   305A           00044     MOVLW d'90'
+007C   00A2           00045     MOVWF no_iteration
+                      00046 
+007D   3000           00047     MOVLW d'0'
+007E   00A0           00048     MOVWF digit0
+                      00049 
+007F   3000           00050     MOVLW d'0'
+0080   00A1           00051     MOVWF digit1
+                      00052 
+Warning[207]: Found label after column 1. (_WHILE)
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0081                  00053     _WHILE
+0081   1285           00054         BCF PORTA,5
+0082   1205           00055         BCF PORTA,4
+0083   2???           00056         CALL DisplayCounter
+Warning[207]: Found label after column 1. (_FOR)
+0084                  00057         _FOR
+0084   0822           00058             MOVF no_iteration,W
+0085   0223           00059             SUBWF i,W
+0086   1803           00060             BTFSC STATUS,C
+0087   2???           00061             GOTO END_FOR
+                      00062 
+0088   1685           00063             BSF PORTA,5
+0089   1205           00064             BCF PORTA,4
+008A   0820           00065             MOVF digit0,W
+008B   2???           00066             CALL GetCode
+008C   0088           00067             MOVWF PORTD
+008D   2???           00068             CALL Delay_5ms
+                      00069 
+008E   1605           00070             BSF PORTA, 4
+008F   1285           00071             BCF PORTA,5
+0090   0821           00072             MOVF digit1,W
+0091   2???           00073             CALL GetCode
+0092   0088           00074             MOVWF PORTD
+0093   2???           00075             CALL Delay_5ms
+0094   0AA3           00076             INCF i,F
+0095   2???           00077             GOTO _FOR   
+Warning[207]: Found label after column 1. (END_FOR)
+0096                  00078         END_FOR
+                      00079 
+0096   01A3           00080         CLRF i
+0097   0AA0           00081         INCF digit0,F
+                      00082 
+Warning[207]: Found label after column 1. (_IF)
+0098                  00083         _IF
+0098   300A           00084             MOVLW d'10'
+0099   0220           00085             SUBWF digit0,W
+009A   1D03           00086             BTFSS STATUS,Z
+009B   2???           00087             GOTO NEXT_IF
+009C   01A0           00088             CLRF digit0
+009D   0AA1           00089             INCF digit1,F
+                      00090 
+Warning[207]: Found label after column 1. (NEXT_IF)
+009E                  00091         NEXT_IF
+009E   3002           00092             MOVLW d'2'
+009F   0221           00093             SUBWF digit1,W
+00A0   1D03           00094             BTFSS STATUS,Z
+00A1   2???           00095             GOTO _WHILE
+                      00096 
+00A2   3001           00097             MOVLW d'1'
+00A3   0220           00098             SUBWF digit0,W
+00A4   1D03           00099             BTFSS STATUS,Z
+00A5   2???           00100             GOTO _WHILE
+                      00101             
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00A6   01A0           00102             CLRF digit0
+00A7   01A1           00103             CLRF digit1
+00A8   1285           00104             BCF PORTA,5
+00A9   1205           00105             BCF PORTA,4
+00AA   2???           00106             CALL NEXT_TEXT
+00AB   2???           00107             GOTO _FOR
+Warning[207]: Found label after column 1. (END_IF)
+00AC                  00108         END_IF
+Warning[207]: Found label after column 1. (END_WHILE)
+00AC                  00109     END_WHILE
+                      00110 
+00AC                  00111 GetCode
+00AC   0782           00112     ADDWF   PCL, F              ; Jump to the correct number. PCL is the program counter register
+00AD   343F           00113     RETLW   B'00111111'         ; 0
+00AE   3406           00114     RETLW   B'00000110'         ; 1
+00AF   345B           00115     RETLW   B'01011011'         ; 2
+00B0   344F           00116     RETLW   B'01001111'         ; 3
+00B1   3466           00117     RETLW   B'01100110'         ; 4
+00B2   346D           00118     RETLW   B'01101101'         ; 5
+00B3   347D           00119     RETLW   B'01111101'         ; 6
+00B4   3407           00120     RETLW   B'00000111'         ; 7
+00B5   347F           00121     RETLW   B'01111111'         ; 8
+00B6   346F           00122     RETLW   B'01101111'         ; 9    
+00B7   3477           00123     RETLW   B'01110111'         ; A
+00B8   347C           00124     RETLW   B'01111100'         ; b    
+00B9   3439           00125     RETLW   B'00111001'         ; C    
+00BA   345E           00126     RETLW   B'01011110'         ; d    
+00BB   3479           00127     RETLW   B'01111001'         ; E    
+00BC   3471           00128     RETLW   B'01110001'         ; F 
+                      00129 
+00BD                  00130 DisplayCounter
+00BD   2???           00131     call        LCD_Clear               ; Clear the LCD screen
+                      00132 
+00BE   3043           00133     movlw       'C'     
+00BF   2???           00134     call        LCD_Send_Char
+00C0   306F           00135     movlw       'o'     
+00C1   2???           00136     call        LCD_Send_Char
+00C2   3075           00137     movlw       'u'     
+00C3   2???           00138     call        LCD_Send_Char
+00C4   306E           00139     movlw       'n'     
+00C5   2???           00140     call        LCD_Send_Char
+00C6   3074           00141     movlw       't'     
+00C7   2???           00142     call        LCD_Send_Char
+00C8   3065           00143     movlw       'e'     
+00C9   2???           00144     call        LCD_Send_Char
+00CA   3072           00145     movlw       'r'     
+00CB   2???           00146     call        LCD_Send_Char
+00CC   3020           00147     movlw       ' '     
+00CD   2???           00148     call        LCD_Send_Char
+00CE   3056           00149     movlw       'V'     
+00CF   2???           00150     call        LCD_Send_Char
+00D0   3061           00151     movlw       'a'     
+00D1   2???           00152     call        LCD_Send_Char
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00D2   306C           00153     movlw       'l'     
+00D3   2???           00154     call        LCD_Send_Char
+00D4   303A           00155     movlw       ':'     
+00D5   2???           00156     call        LCD_Send_Char
+00D6   3020           00157     movlw       ' '     
+00D7   2???           00158     call        LCD_Send_Char
+                      00159     
+00D8   0821           00160     MOVF        digit1, W ; WREG <- digit
+00D9   3E30           00161     ADDLW       '0'         ; Add '0' to the digit 
+00DA   2???           00162     CALL        LCD_Send_Char
+                      00163 
+                      00164     ; Print digit1: digits[2]
+00DB   0820           00165     MOVF        digit0, W ; WREG <- digit
+00DC   3E30           00166     ADDLW       '0'         ; Add '0' to the digit 
+00DD   2???           00167     CALL        LCD_Send_Char
+                      00168     
+00DE   2???           00169     CALL        LCD_MoveCursor2SecondLine    
+                      00170     
+00DF   3043           00171     movlw       'C'     
+00E0   2???           00172     call        LCD_Send_Char
+00E1   306F           00173     movlw       'o'     
+00E2   2???           00174     call        LCD_Send_Char
+00E3   3075           00175     movlw       'u'     
+00E4   2???           00176     call        LCD_Send_Char
+00E5   306E           00177     movlw       'n'     
+00E6   2???           00178     call        LCD_Send_Char
+00E7   3074           00179     movlw       't'     
+00E8   2???           00180     call        LCD_Send_Char
+00E9   3069           00181     movlw       'i'     
+00EA   2???           00182     call        LCD_Send_Char
+00EB   306E           00183     movlw       'n'     
+00EC   2???           00184     call        LCD_Send_Char
+00ED   3067           00185     movlw       'g'     
+00EE   2???           00186     call        LCD_Send_Char
+00EF   3020           00187     movlw       ' '     
+00F0   2???           00188     call        LCD_Send_Char
+00F1   3075           00189     movlw       'u'     
+00F2   2???           00190     call        LCD_Send_Char
+00F3   3070           00191     movlw       'p'     
+00F4   2???           00192     call        LCD_Send_Char
+00F5   302E           00193     movlw       '.'     
+00F6   2???           00194     call        LCD_Send_Char
+00F7   302E           00195     movlw       '.'     
+00F8   2???           00196     call        LCD_Send_Char
+00F9   302E           00197     movlw       '.'     
+00FA   2???           00198     call        LCD_Send_Char
+00FB   0008           00199     RETURN
+00FC                  00200 NEXT_TEXT       ;?Rolled over to 0?
+00FC   2???           00201     call        LCD_Clear
+                      00202     
+00FD   3043           00203     movlw       'C'     
+00FE   2???           00204     call        LCD_Send_Char
+00FF   306F           00205     movlw       'o'     
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0100   2???           00206     call        LCD_Send_Char
+0101   3075           00207     movlw       'u'     
+0102   2???           00208     call        LCD_Send_Char
+0103   306E           00209     movlw       'n'     
+0104   2???           00210     call        LCD_Send_Char
+0105   3074           00211     movlw       't'     
+0106   2???           00212     call        LCD_Send_Char
+0107   3065           00213     movlw       'e'     
+0108   2???           00214     call        LCD_Send_Char
+0109   3072           00215     movlw       'r'     
+010A   2???           00216     call        LCD_Send_Char
+010B   3020           00217     movlw       ' '     
+010C   2???           00218     call        LCD_Send_Char
+010D   3056           00219     movlw       'V'     
+010E   2???           00220     call        LCD_Send_Char
+010F   3061           00221     movlw       'a'     
+0110   2???           00222     call        LCD_Send_Char
+0111   306C           00223     movlw       'l'     
+0112   2???           00224     call        LCD_Send_Char
+0113   303A           00225     movlw       ':'     
+0114   2???           00226     call        LCD_Send_Char
+0115   3020           00227     movlw       ' '     
+0116   2???           00228     call        LCD_Send_Char
+                      00229     
+0117   0821           00230     MOVF        digit1, W ; WREG <- digit
+0118   3E30           00231     ADDLW       '0'         ; Add '0' to the digit 
+0119   2???           00232     CALL        LCD_Send_Char
+                      00233 
+                      00234     ; Print digit1: digits[2]
+011A   0820           00235     MOVF        digit0, W ; WREG <- digit
+011B   3E30           00236     ADDLW       '0'         ; Add '0' to the digit 
+011C   2???           00237     CALL        LCD_Send_Char
+                      00238     
+011D   2???           00239     CALL        LCD_MoveCursor2SecondLine
+011E   3052           00240     movlw       'R'     
+011F   2???           00241     call        LCD_Send_Char
+0120   306F           00242     movlw       'o'     
+0121   2???           00243     call        LCD_Send_Char
+0122   306C           00244     movlw       'l'     
+0123   2???           00245     call        LCD_Send_Char
+0124   306C           00246     movlw       'l'     
+0125   2???           00247     call        LCD_Send_Char
+0126   3065           00248     movlw       'e'     
+0127   2???           00249     call        LCD_Send_Char
+0128   3064           00250     movlw       'd'     
+0129   2???           00251     call        LCD_Send_Char
+012A   3020           00252     movlw       ' '     
+012B   2???           00253     call        LCD_Send_Char
+012C   306F           00254     movlw       'o'     
+012D   2???           00255     call        LCD_Send_Char
+012E   3076           00256     movlw       'v'     
+012F   2???           00257     call        LCD_Send_Char
+0130   3065           00258     movlw       'e'     
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0131   2???           00259     call        LCD_Send_Char
+0132   3072           00260     movlw       'r'     
+0133   2???           00261     call        LCD_Send_Char
+0134   3020           00262     movlw       ' '     
+0135   2???           00263     call        LCD_Send_Char
+0136   3074           00264     movlw       't'     
+0137   2???           00265     call        LCD_Send_Char
+0138   306F           00266     movlw       'o'     
+0139   2???           00267     call        LCD_Send_Char
+013A   3020           00268     movlw       ' '     
+013B   2???           00269     call        LCD_Send_Char
+013C   3030           00270     movlw       '0'     
+013D   2???           00271     call        LCD_Send_Char
+013E   0008           00272     RETURN
+013F   2???           00273 LOOP GOTO  $
+Warning[205]: Found directive in column 1. (END)
+3D71                  00274 END
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+BCLIE                             00000003
+BCLIF                             00000003
+BF                                00000000
+BRGH                              00000002
+C                                 00000000
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           0000001D
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCPR1                             00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CCPR2                             0000001B
+CCPR2H                            0000001C
+CCPR2L                            0000001B
+CHS0                              00000003
+CHS1                              00000004
+CHS2                              00000005
+CKE                               00000006
+CKP                               00000004
+CREN                              00000004
+CSRC                              00000007
+D                                 00000005
+D0                                PORTD, 0
+D1                                PORTD, 1
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+D2                                PORTD, 2
+D3                                PORTD, 3
+D4                                PORTD, 4
+D5                                PORTD, 5
+D6                                PORTD, 6
+D7                                PORTD, 7
+DATA_ADDRESS                      00000005
+DC                                00000001
+D_A                               00000005
+D_NOT_A                           00000005
+Delay_100ms                       0000001E
+Delay_125us                       00000001
+Delay_1ms                         00000006
+Delay_1s                          00000030
+Delay_20ms                        00000012
+Delay_250ms                       00000024
+Delay_500ms                       0000002A
+Delay_50ms                        00000018
+Delay_5ms                         0000000C
+DisplayCounter                    000000BD
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+EN                                PORTE, 1
+END_FOR                           00000096
+END_IF                            000000AC
+END_WHILE                         000000AC
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GCEN                              00000007
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+GO_NOT_DONE                       00000002
+GetCode                           000000AC
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+IRP                               00000007
+LABEL_100ms_DELAY                 00000020
+LABEL_125us_DELAY                 00000003
+LABEL_1ms_DELAY                   00000008
+LABEL_1s_DELAY                    00000032
+LABEL_20ms_DELAY                  00000014
+LABEL_250ms_DELAY                 00000026
+LABEL_500ms_DELAY                 0000002C
+LABEL_50ms_DELAY                  0000001A
+LABEL_5ms_DELAY                   0000000E
+LCD_Clear                         00000057
+LCD_Initialize                    00000036
+LCD_MoveCursor2SecondLine         0000005B
+LCD_NO_OF_DATA_BITS               8
+LCD_Send                          0000004C
+LCD_Send_Char                     00000053
+LCD_Send_Command                  0000004F
+LCD_Send_Trigger                  0000005E
+LOOP                              0000013F
+MAIN                              0000006C
+NEXT_IF                           0000009E
+NEXT_TEXT                         000000FC
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OBF                               00000006
+OERR                              00000001
+OPTION_REG                        00000081
+P                                 00000004
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PEN                               00000002
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSPIE                             00000007
+PSPIF                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RC0                               00000000
+RC1                               00000001
+RC2                               00000002
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+RD0                               00000000
+RD1                               00000001
+RD2                               00000002
+RD3                               00000003
+RD4                               00000004
+RD5                               00000005
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RD6                               00000006
+RD7                               00000007
+RE0                               00000000
+RE1                               00000001
+RE2                               00000002
+READ_WRITE                        00000002
+RP0                               00000005
+RP1                               00000006
+RS                                PORTE, 2
+RSEN                              00000001
+RW                                PORTE, 0
+RX9                               00000006
+RX9D                              00000000
+R_NOT_W                           00000002
+R_W                               00000002
+S                                 00000003
+SEN                               00000000
+SMP                               00000007
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPCON2                           00000091
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1                              0000000E
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRISC                             00000087
+TRISC0                            00000000
+TRISC1                            00000001
+TRISC2                            00000002
+TRISC3                            00000003
+TRISC4                            00000004
+TRISC5                            00000005
+TRISC6                            00000006
+TRISC7                            00000007
+TRISD                             00000088
+TRISD0                            00000000
+TRISD1                            00000001
+TRISD2                            00000002
+TRISD3                            00000003
+TRISD4                            00000004
+TRISD5                            00000005
+TRISD6                            00000006
+TRISD7                            00000007
+TRISE                             00000089
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRMT                              00000001
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+UA                                00000001
+W                                 00000000
+WCOL                              00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_.org_0_013F                      0000013F
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_BOREN_OFF                        00003FBF
+_BOREN_ON                         00003FFF
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00000FCF
+_CP_HALF                          00001FDF
+_CP_OFF                           00003FFF
+_CP_UPPER_256                     00002FEF
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_DEVID1                           00002006
+_FOR                              00000084
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_IF                               00000098
+_LP_OSC                           00003FFC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WHILE                            00000081
+MPASM 5.84                          MAIN.ASM   1-6-2022  19:42:36         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WRT_ENABLE_OFF                   00003DFF
+_WRT_ENABLE_ON                    00003FFF
+_WRT_OFF                          00003DFF
+_WRT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F877A                         00000001
+delay_counter1                    0000007C
+delay_counter2                    0000007D
+delay_counter3                    0000007E
+delay_counter4                    0000007F
+digit0                            00000020
+digit1                            00000021
+i                                 00000023
+no_iteration                      00000022
+number                            00000024
+
+Errors   :     0
+Warnings :    13 reported,     0 suppressed
+Messages :     6 reported,     0 suppressed
+
+
